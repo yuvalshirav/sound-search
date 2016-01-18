@@ -16,7 +16,7 @@
   # here if no route is provided on the URL.
   #
   # See: [navigation.coffee](navigation.html)
-  App.rootRoute = ""
+  App.rootRoute = "search"
 
   # Creates an application global request to return the
   # default region. It will be used, for example, by
@@ -26,5 +26,9 @@
   # See: [application-controller.coffee](application-controller.html)
   App.reqres.setHandler "default:region", ->
     return App.contentRegion
+
+  App.commands.setHandlers
+    show: (view) ->
+      App.contentRegion.show(view)
 
   return App

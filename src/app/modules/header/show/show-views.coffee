@@ -10,3 +10,4 @@
   # from App's base ItemView (which extends Marionette.ItemView)
   class Show.HeaderView extends App.Views.ItemView
     template: "header/show/header"
+    className: "container"

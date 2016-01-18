@@ -1,0 +1,14 @@
+<div class="play js-play info-centered">
+	<div class="track-details info-centered">
+		{{#if image}}
+			<img src="{{image}}" alt="{{title}}"/>
+		{{else}}
+			<div class="title info-centered">{{title}}</div>
+		{{/if}}
+	</div>
+	<div class="player">
+		<audio controls name="media">
+			<source src="{{playerUrl}}">
+		</audio>
+	</div>
+</div>

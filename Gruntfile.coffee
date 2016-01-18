@@ -2,6 +2,8 @@ module.exports = (grunt) ->
 
   require("load-grunt-tasks")(grunt)
   require("time-grunt")(grunt)
+  serveStatic = require('serve-static')
+  modRewrite = require('connect-modrewrite')
 
   grunt.initConfig
     pkg: grunt.file.readJSON "package.json"
@@ -132,8 +134,16 @@ module.exports = (grunt) ->
     connect:
       server:
         options:
+          base: ['vendor', 'dist']
+          open: true
           port: 3000
           livereload: true
+          middleware: (connect, options) ->
+            middlewares = []
+            middlewares.push(modRewrite(['^[^\\.]*$ /index.html [L]']))
+            options.base.forEach (base) ->
+              middlewares.push(serveStatic(base))
+            middlewares
 
     casperjs:
       files: ["<%= paths.tests.functional %>/**/*.coffee"]

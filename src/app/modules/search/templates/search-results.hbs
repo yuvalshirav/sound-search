@@ -1,0 +1,19 @@
+<div class="result-list">
+	<ul class="list-group"></ul>
+	{{#if hasResults}}
+		<div class="actions">
+			<span class="btn-group">
+				{{#if hasPrev}}
+					<button class="btn btn-info previous">&#8249; Prev</button>
+			  {{/if}}
+			  {{#if hasNext}}
+				  <button class="btn btn-info next">Next &#8250;</button>
+			  {{/if}}
+			 </span>
+		  <span class="btn-group">
+		  	<button class="btn btn-info list-mode">&#9776;</button>
+		  	<button class="btn btn-info grid-mode">&#9783;</button>
+		  </span>
+		</div>
+	{{/if}}
+</div>

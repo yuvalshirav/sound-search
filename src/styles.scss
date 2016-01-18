@@ -1,8 +1,231 @@
-@import "../vendor/normalize-scss/normalize";
+@import "app/styles/bootstrap-flatly";
+@import "../vendor/animatewithsass/_properties.scss";
+@import "../vendor/animatewithsass/_fading-entrances/fading-entrances.scss";
+@import "../vendor/toastr/toastr.scss";
 
-ul, li {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+@mixin sm-up {
+  @media screen and (min-width: 768px) {
+    @content;
+  }
+}
+
+$main-color: #2c3e50;
+$gutter: 15px;
+$track-selection-animation-duration: 1s;
+$result-rows: 6;
+
+body {
+	padding-top: 50px;
+}
+
+.info-centered {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	img {
+		max-width: 100%;
+	}
+}
+
+.track {
+	padding-top: 10px;
+	@include sm-up {
+		padding-top: 0;
+	}
+	.title {
+		background: whitesmoke;
+		width: 100%;
+		min-height: 200px;
+		padding: 15px;
+		border: solid 1px $main-color;
+		user-select: none;
+	}
+	.play {
+		cursor: pointer;
+		.player {
+			display: none;
+		}
+		.track-details {
+			position: relative;
+			width: 300px;
+			&:before {
+				content: " ";
+				position: absolute;
+			  width: 100%;
+			  height: 100%;
+			  opacity: 0;
+			}
+			@include sm-up {
+				&:hover {
+					&:before {
+						content: "\25b6";
+				    font-size: 40px;
+				    background-color: rgba(0,0,0,0.8);
+				    opacity: 1;
+				    transition: opacity 0.3s;
+				    display: block;
+				    top: 0;
+				    left: 0;
+				    color: white;
+				    display: flex;
+				    align-items: center;
+				    justify-content: center;
+					}
+				}
+			}
+		}
+		&.playing {
+			.track-details {
+				@include sm-up {
+					&:hover {
+						&:before {
+							content: "\2590\a0\258c";
+						}
+					}
+				}
+			}
+			.player {
+				display: block;
+				@include fadeInDown();
+			}
+		}
+		@include fadeInDown();
+		&.list {
+			@include sm-up {
+				animation-delay: $track-selection-animation-duration;
+			}
+		}
+	}
+}
+
+// track selection animation
+@for $i from 1 through $result-rows {
+	@keyframes rowSelect#{$i} {
+		0% {}
+		100% {
+			transform: translate(calc(100% + #{$gutter * 2}), #{-100 * $i}%) scale(0.1);
+		}
+	}
+}
+
+.list-group {
+	.list-group-item {
+		border: none;
+		padding-left: 0;
+		padding-right: 0;
+	}
+}
+
+.results {
+	margin-top: 15px;
+	.list-group {
+		.list-group-item {
+			background: none;
+			cursor: pointer;
+			user-select: none;
+    	padding-left: 5px;
+    	padding-right: 5px;
+		}
+	}
+	.actions {
+		display: flex;
+		justify-content: space-between;
+	}
+}
+.result-list {
+	&.list {
+		button.list-mode {
+			color: $main-color;
+		}
+		.result {
+			.title {
+				display: block;
+				overflow: hidden;
+    		white-space: nowrap;
+    		text-overflow: ellipsis;
+			}
+			.image {
+				display: none;
+			}
+		}
+		ul {
+			li {
+				&:hover {
+					background-color: whitesmoke;
+				}
+				&.selected {
+					transform-origin: center;
+					animation-duration: $track-selection-animation-duration;
+					font-weight: bold;
+				}
+				@include sm-up {
+					@for $i from 1 through $result-rows {
+						&:nth-child(#{$i}) {
+							&.selected {
+								animation-name: rowSelect#{$i};
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	&.grid {
+		button.grid-mode {
+			color: $main-color;
+		}
+		.result {
+			.title {
+				display: none;
+			}
+			.image {
+				display: block;
+				display: flex;
+		    justify-content: center;
+		    align-items: center;
+		    /* flex-wrap: wrap-reverse; */
+		    white-space: normal;
+		    text-align: center;
+			}
+		}
+		ul {
+			$margin: 5px;
+			display: flex;
+			flex-wrap: wrap;
+			padding: 0;
+			li {
+				$selection-color: #83f52c;
+				display: flex;
+				position: relative;
+				align-items: center;
+				justify-content: center;
+				flex: 0 0 calc(50% - #{2 * $margin});
+				margin: $margin;
+				padding: 10px;
+				border-radius: 0 0 0 0;
+				box-shadow: inset 0px 0px 7px #ccc, 0px 0px 0px $selection-color;
+				transition: box-shadow 0.2s linear;
+				&.selected, &:hover {
+					box-shadow: inset 0px 0px 0px #ccc, 0px 0px 15px $selection-color;
+				}
+				&:before {
+					// square 
+					content: "";
+    			padding-top: 100%;
+    			float: left;
+				}
+				img {
+					width: 100%;
+					height: auto;
+				}
+			}
+		}
+	}
+	&.loading {
+		filter: blur(5px);
+		-webkit-filter: blur(5px);
+		pointer-events: none;
+	}
 }
 
